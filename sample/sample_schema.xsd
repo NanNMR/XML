@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="NAN" xmlns:nan="NAN"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" version="1.0">
+
+    <xs:element name="sample">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="name" type="nan:name_element" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="mass" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="volume" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="ionic_strength" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="conductivity" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="hydration" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+                <!-- Note that the database has separate fields for hydration level and units, but here one cannot specify units without level-->
+                <xs:element name="pH" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:float">
+                                <xs:attribute name="is_direct" use="optional" type="xs:boolean"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="creator" type="nan:person" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="pi" type="nan:person" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="preparation" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="notes" minOccurs="0" maxOccurs="1"/> <!-- notes_preparation -->
+                        </xs:all>
+                        <xs:attribute name="date" use="optional" type="xs:date"/>
+                        <xs:attribute name="url" use="optional" type="xs:anyURI"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="components" minOccurs="0">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="bicelle" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="biological_material" type="nan:biological" minOccurs="0" maxOccurs="unbounded"/> <!-- BIO -->
+                            <xs:element name="buffer" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="carbohydrate" type="nan:carbohydrate" minOccurs="0" maxOccurs="unbounded"/> <!-- CARB -->
+                            <xs:element name="chemical" type="nan:chemicalFormula" minOccurs="0" maxOccurs="unbounded"/> <!-- CHEMICAL -->
+                            <xs:element name="detergent" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="environmental" type="nan:environmental" minOccurs="0" maxOccurs="unbounded"/> <!-- ENV -->
+                            <xs:element name="excipient" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="indirect_reference_standard" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="internal_standard" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="lipid" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="metabolite" type="nan:chemicalFormula" minOccurs="0" maxOccurs="unbounded"/> <!-- CHEMICAL -->
+                            <xs:element name="micelle" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="nano-disk" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="natural_product" type="nan:chemicalFormula" minOccurs="0" maxOccurs="unbounded"/> <!-- CHEMICAL -->
+                            <xs:element name="nucleic_acid" type="nan:nucleic_acid" minOccurs="0" maxOccurs="unbounded"/> <!-- DNA or RNA -->
+                            <xs:element name="other" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="other_organic" type="nan:chemicalFormula" minOccurs="0" maxOccurs="unbounded"/> <!-- CHEMICAL -->
+                            <xs:element name="paramagnetic" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="polarizing_agent" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="polymer" type="nan:polymer" minOccurs="0" maxOccurs="unbounded"/> <!-- POLYMER -->
+                            <xs:element name="protein" type="nan:protein" minOccurs="0" maxOccurs="unbounded"/> <!-- PROTEIN -->
+                            <xs:element name="salt" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="solvent_system" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="stretched_compressed_gel" type="nan:componentOnly" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="notes" minOccurs="0" maxOccurs="1"/> <!-- Notes_composition -->
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="container" minOccurs="0" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="nan:container_base">
+                                <xs:choice>
+                                    <xs:element name="tube" type="nan:tube" minOccurs="0" maxOccurs="1"/>
+                                    <xs:element name="rotor" type="nan:rotor" minOccurs="0" maxOccurs="1"/>
+                                    <xs:element name="other" minOccurs="0" maxOccurs="1" fixed=""/>
+                                </xs:choice>
+                            </xs:extension>
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="identifier" minOccurs="0" maxOccurs="unbounded" type="nan:identifier_type"/>
+                <xs:element name="notes" minOccurs="0" maxOccurs="1"/> <!-- Notes general -->
+            </xs:all> 
+            <xs:attribute name="is_solid" use="optional" type="xs:boolean"/>
+            <xs:attribute name="is_paramagnetic" use="optional" type="xs:boolean"/>
+            <xs:attribute name="is_aligned" use="optional" type="xs:boolean"/>
+            <xs:attribute name="is_dry_powder" use="optional" type="xs:boolean"/>
+            <xs:attribute name="is_conductive" use="optional" type="xs:boolean"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- Basic Types -->
+    <xs:complexType name="identifier_type">
+        <xs:simpleContent>
+            <xs:extension base="xs:string"> <!-- Could consider a regex on ints for uuids -->
+                <xs:attribute name="type" use="optional" type="nan:id_type"/>   
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:simpleType name="name_element">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"></xs:minLength> <!-- is empty string prohibited? -->
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="value_with_units">
+        <xs:simpleContent>
+            <xs:extension base="xs:float">
+                <xs:attribute name="units" use="optional" type="xs:string"/>
+                <!-- Could specialize this for each specific element with enumerated units -->
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <!-- Component Types -->
+    <xs:group name="componentAttributes">
+        <xs:annotation><xs:documentation>These properties are common to all sample components.</xs:documentation></xs:annotation>
+        <xs:all>
+            <xs:element name="identifier" minOccurs="0" maxOccurs="unbounded" type="nan:identifier_type"/>
+            <xs:element name="name" type="nan:name_element" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="molecular_weight" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="quantity" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="purity" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="role" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="isotopic_label" type="nan:isotopic_labels" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:all>
+    </xs:group>
+    
+    <xs:complexType name="componentOnly">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="protein">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+            <xs:element name="sequence" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="modifications" type="nan:protein_modifications" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="uniprot_id" use="optional" type="xs:string"/>
+        <xs:attribute name="is_homo_oligomer" use="optional" type="xs:boolean"/>
+        <xs:attribute name="is_homo_oligomer_symmetric" use="optional" type="xs:boolean"/>
+        <!-- The above 2 bools match the DB, but it would be better to have 1 attribute with three values: monomer, symmetric, assymetric -->
+        <xs:attribute name="number_of_subunits" use="optional" type="xs:integer"/>
+        <xs:attribute name="conformational_state" use="optional" type="xs:string"/>
+    </xs:complexType>
+    
+    <xs:complexType name="protein_modifications">
+        <xs:all>
+            <xs:element name="linkage" type="nan:protein_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="post_translational_modification" type="nan:protein_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="non_standard_amino_acid" type="nan:protein_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="paramagentic_tag" type="nan:protein_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="purification_tag" type="nan:protein_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="protein_modification_base">
+        <xs:all>
+            <xs:element name="residue" type="xs:integer" minOccurs="0" maxOccurs="2"/>
+            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="modification_type" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="nucleic_acid_modifications">
+        <xs:all>
+            <xs:element name="linkage" type="nan:nucleic_acid_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="post_translational_modification" type="nan:nucleic_acid_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="non_standard_nucleic_acid" type="nan:nucleic_acid_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="paramagentic_tag" type="nan:nucleic_acid_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="purifcation_tag" type="nan:nucleic_acid_modification_base" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="nucleic_acid_modification_base">
+        <xs:all>
+            <xs:element name="residue" type="xs:positiveInteger" minOccurs="0" maxOccurs="2"/>
+            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="modification_type" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:complexType name="nucleic_acid">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+            <xs:element name="sequence" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="reverse_complement" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="non_standard_details" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="covalent_linkage_details" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="modifications" type="nan:nucleic_acid_modifications" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="type" use="required" type="xs:string"/> <!-- DNA or RNA -->
+        <xs:attribute name="genbank_id" use="optional" type="xs:string"/>
+        <xs:attribute name="is_non_standard" use="optional" type="xs:boolean"/>
+        <xs:attribute name="is_covalent_linkage" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+    
+    <xs:group name="chemicalAttributes">
+        <xs:all>
+            <xs:element name="chemical_formula" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="inchi" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="chemical_class" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="class_details" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:group>
+    
+    <xs:complexType name="chemicalFormula">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+            <xs:group ref="nan:chemicalAttributes"/>
+        </xs:all>
+        <xs:attribute name="chebi_id" use="optional" type="xs:string"/>
+        <xs:attribute name="pubchem_id" use="optional" type="xs:string"/>
+        <xs:attribute name="cas_id" use="optional" type="xs:string"/>
+    </xs:complexType>
+    
+    <xs:complexType name="carbohydrate">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+            <xs:element name="IUPAC-Condensed_String" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="modification" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="type" type="nan:carbohydrate_modification"></xs:attribute>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="classification" use="optional" type="xs:string"/>
+    </xs:complexType>
+    
+    <xs:group name="polymerAttributes">
+        <xs:all>
+            <xs:element name="biological_source" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="weight_average_molecular_weight" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="number_average_molecular_weight" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dispersity" type="xs:float" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="tacticity" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="chemical_class" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="class_details" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="substitution_degree" type="xs:float" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="sequence_order" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="subunit" type="nan:polymer_subunit" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:all>
+    </xs:group>
+    
+    <xs:complexType name="polymer">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+            <xs:group ref="nan:polymerAttributes"/>
+        </xs:all>
+        <xs:attribute name="subunits" use="optional" type="xs:integer"/>
+        <xs:attribute name="source" use="optional" type="nan:polymer_source"/>
+        <xs:attribute name="branching" use="optional" type="nan:polymer_branching"/>
+        <xs:attribute name="repeating" use="optional" type="xs:boolean"/>
+        <xs:attribute name="repeat_sequence_length" use="optional" type="xs:float"/>
+        <xs:attribute name="number_of_repeats" use="optional" type="xs:integer"/>
+    </xs:complexType>
+    
+    <xs:complexType name="polymer_subunit">
+        <xs:all>
+            <xs:element name="abbreviation" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="chemical_formula" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="molecular_weight" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:complexType>
+    
+    <xs:group name="biologicalAttributes">
+        <xs:all>
+            <xs:element name="extraction" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="source_organism" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:group>
+    
+    <xs:complexType name="biological">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+            <xs:group ref="nan:biologicalAttributes"/>
+        </xs:all>
+        <xs:attribute name="sample_group" use="optional" type="xs:integer"/>
+        <xs:attribute name="biological_type" use="optional" type="xs:string"/>
+        <xs:attribute name="sample_category" use="optional" type="xs:string"/>
+        <xs:attribute name="randomized" use="optional" type="xs:boolean"/>
+        <xs:attribute name="extracted" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+    
+    <xs:group name="environmentalAttributes">
+        <xs:all>
+            <xs:element name="extraction" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="source_material" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="source_location" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="location" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+    </xs:group>
+    
+    <xs:complexType name="environmental">
+        <xs:all>
+            <xs:group ref="nan:componentAttributes"/>
+            <xs:group ref="nan:environmentalAttributes"/>
+        </xs:all>
+        <xs:attribute name="sample_group" use="optional" type="xs:integer"/>
+        <xs:attribute name="sample_category" use="optional" type="xs:string"/>
+        <xs:attribute name="randomized" use="optional" type="xs:boolean"/>
+        <xs:attribute name="extracted" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+    
+    <xs:complexType name="isotopic_labels">
+        <xs:all>
+            <xs:element name="segment" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="residue" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="atom" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="metabolic_precursor" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="other_data" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="isotope" use="optional" type="xs:string"/>
+        <xs:attribute name="enrichment_percentage" use="optional" type="xs:float"/>
+    </xs:complexType>
+    
+    <!-- Containers -->    
+    <xs:complexType name="container_base">
+        <xs:sequence>
+            <xs:element name="notes" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="tube">
+        <xs:all>
+            <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="identifier" type="nan:identifier_type" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="outer_diameter" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="geometry" type="xs:string"/>
+        <!--xs:attribute name="outer_diameter" type="xs:string"/-->
+    </xs:complexType>
+    
+    <xs:complexType name="rotor">
+        <xs:all>
+            <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="identifier" type="nan:identifier_type" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="size" type="nan:value_with_units" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="material" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="spacer_material" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="cap_material" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <!-- Both materials use a controlled vocabulary but expressable as a list.  Very complicated to validate in XSD -->
+        </xs:all>
+        <xs:attribute name="is_spacers" type="xs:boolean"/>
+        <xs:attribute name="is_centered" type="xs:boolean"/>
+        <xs:attribute name="type" type="nan:rotor_type"/>
+        <!--xs:attribute name="size_mm" type="xs:float"/-->
+        <xs:attribute name="seal_method" type="nan:seal_method"/>
+        <xs:attribute name="packing_type" type="nan:packing_type"/>
+    </xs:complexType>
+    
+    <!--xs:complexType name="spacer_material">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="centered" use="optional" type="xs:boolean"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType-->
+    
+    <!-- Persons -->
+    <xs:group name="personAttributes">
+        <xs:sequence>
+            <xs:element name="first_name" type="nan:name_element" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="last_name" type="nan:name_element" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:group>
+    
+    <xs:complexType name="person">
+        <xs:sequence>
+            <xs:group ref="nan:personAttributes"/>
+        </xs:sequence>
+        <xs:attribute name="orcid" type="xs:string"/>
+        <xs:attribute name="NAN_id" type="xs:string"/>
+    </xs:complexType>
+    
+    <!-- Enumerated Types -->
+    <xs:simpleType name="id_type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="nan"/>
+            <xs:enumeration value="uuid"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="container_type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="tube"/>
+            <xs:enumeration value="rotor"/>
+            <xs:enumeration value="other"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="rotor_type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Bruker"/>
+            <xs:enumeration value="Varian"/>
+            <xs:enumeration value="Doty"/>
+            <xs:enumeration value="other"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="seal_method">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Not_Sealed"/>
+            <xs:enumeration value="O-Ring"/>
+            <xs:enumeration value="Rubber_Disk"/>
+            <xs:enumeration value="Glue"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="packing_type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Full"/>
+            <xs:enumeration value="Partial"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="carbohydrate_modification">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Glycopeptides"/>
+            <xs:enumeration value="Glycolipids"/>
+            <xs:enumeration value="Glycosides"/>
+        </xs:restriction>
+    </xs:simpleType>
+        
+    <xs:simpleType name="polymer_source">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="None"/>
+            <xs:enumeration value="Synthetic"/>
+            <xs:enumeration value="Biological"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="polymer_branching">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="None"/>
+            <xs:enumeration value="Linear"/>
+            <xs:enumeration value="Branched"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+</xs:schema>
