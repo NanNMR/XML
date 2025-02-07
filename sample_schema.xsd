@@ -358,7 +358,7 @@
         <xs:attribute name="is_centered" type="xs:boolean"/>
         <xs:attribute name="type" type="nan:rotor_type"/>
         <!--xs:attribute name="size_mm" type="xs:float"/-->
-        <xs:attribute name="seal_method" type="nan:seal_method"/>
+        <xs:attribute name="seal_method" type="xs:string"/>
         <xs:attribute name="packing_type" type="nan:packing_type"/>
     </xs:complexType>
     
@@ -409,15 +409,6 @@
             <xs:enumeration value="Varian"/>
             <xs:enumeration value="Doty"/>
             <xs:enumeration value="other"/>
-        </xs:restriction>
-    </xs:simpleType>
-    
-    <xs:simpleType name="seal_method">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="Not_Sealed"/>
-            <xs:enumeration value="O-Ring"/>
-            <xs:enumeration value="Rubber_Disk"/>
-            <xs:enumeration value="Glue"/>
         </xs:restriction>
     </xs:simpleType>
     
