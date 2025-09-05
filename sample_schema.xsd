@@ -83,7 +83,7 @@
                 <xs:element name="identifier" minOccurs="0" maxOccurs="unbounded" type="nan:identifier_type"/>
                 <xs:element name="notes" minOccurs="0" maxOccurs="1"/> <!-- Notes general -->
             </xs:all> 
-            <xs:attribute name="is_solid" use="optional" type="xs:boolean"/>
+            <xs:attribute name="state" use="optional" type="nan:sample_state"/>
             <xs:attribute name="is_paramagnetic" use="optional" type="xs:boolean"/>
             <xs:attribute name="is_aligned" use="optional" type="xs:boolean"/>
             <xs:attribute name="is_dry_powder" use="optional" type="xs:boolean"/>
@@ -442,5 +442,12 @@
             <xs:enumeration value="Branched"/>
         </xs:restriction>
     </xs:simpleType>
+
+	<xs:simpleType name="sample_state">
+	  <xs:restriction base="xs:string">
+		<xs:enumeration value="solid"/>
+		<xs:enumeration value="solution"/>
+	  </xs:restriction>
+	</xs:simpleType>
     
 </xs:schema>
